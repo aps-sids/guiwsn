@@ -1,0 +1,31 @@
+from sqlalchemy import (Column, String, ForeignKey,
+                        Integer, Float, DateTime)
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+
+Base = declarative_base()
+
+
+class Sensor(Base):
+    __tablename__ = 'sensors'
+    id = Column(Integer, primary_key=True)
+    type = Column(String(50))
+    range_min = Column(Integer)
+    range_max = Column(Integer)
+    unit = Column(String(10))
+
+
+class Data(Base):
+    __tablename__ = 'data'
+    id = Column(Integer, primary_key=True)
+    sensor_id = Column(Integer, ForeignKey('sensors.id'))
+    value = Column(Float)
+    time = Column(DateTime)
+    sensor = relationship("Sensor", backref=backref('data', order_by=id))
+
+
+engine = create_engine('sqlite:///sql_alchemy_example.db')
+
+
+Base.metadata.create_all(engine)
