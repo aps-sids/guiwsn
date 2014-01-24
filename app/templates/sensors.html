@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div id="sensors-container" class="row">
+
+  
+    <ul id="sensors">
+      {%for sensor in sensors%}
+        <li>
+          {{sensor.id}}
+        </li>
+        
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}

@@ -1,10 +1,8 @@
 from sqlalchemy import (Column, String, ForeignKey,
                         Integer, Float, DateTime)
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship, backref
 from datetime import datetime
-Base = declarative_base()
+from app.database import Base
 
 
 class Sensor(Base):
@@ -15,13 +13,16 @@ class Sensor(Base):
     range_max = Column(Integer)
     unit = Column(String(10))
 
-    def __init__(self, type, range_min, range_max, unit):
+    def __init__(self, type='Digital', range_min=0, range_max=5, unit='V'):
         self.type = type
         self.range_max = range_max
         self.range_min = range_min
         self.unit = unit
 
-        
+    def __repr__(self):
+        return "<Sensor:id {} type {}>".format(self.id, self.type)
+
+
 class Data(Base):
     __tablename__ = 'data'
     id = Column(Integer, primary_key=True)
@@ -35,8 +36,7 @@ class Data(Base):
         self.time = datetime.now()
         self.value = value
 
-        
-engine = create_engine('sqlite:///sql_alchemy_example.db')
-Session = sessionmaker(bind=engine)
-
-#Base.metadata.create_all(engine)
+    def __repr__(self):
+        return "<Data: id {} sensor {} value {} >".format(self.id,
+                                                          self.sensor_id,
+                                                          self.value)
