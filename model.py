@@ -1,6 +1,6 @@
 from sqlalchemy import (Column, String, ForeignKey,
                         Integer, Float, DateTime)
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from datetime import datetime
@@ -37,6 +37,6 @@ class Data(Base):
 
         
 engine = create_engine('sqlite:///sql_alchemy_example.db')
-
+Session = sessionmaker(bind=engine)
 
 #Base.metadata.create_all(engine)
