@@ -1,3 +1,4 @@
 /sql_alchemy_example.db
 *.pyc
 .\#*
+/test.db
