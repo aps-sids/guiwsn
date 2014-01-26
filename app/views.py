@@ -2,6 +2,11 @@ from flask import render_template
 from app.database import db_session
 from app.models import Sensor, Data
 from app import app
+from flask_sockets import Sockets
+from sqlalchemy import desc
+from json import dumps
+
+sockets = Sockets(app)
 
 
 @app.teardown_appcontext

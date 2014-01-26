@@ -7,5 +7,35 @@
         <li>{{d.id}} {{d.time}} {{d.value}}</li>
       {% endfor %}
     </ul>
+    <button id="send" type="button" class="btn btn-primary">Send</button>
+    <p id="log"></p>
 </div>
+
+
 {% endblock %}
+
+{% block script %}
+  <script>
+ $(document).ready(function(){
+     if ("WebSocket" in window) {
+       ws = new WebSocket("ws://" + document.domain +":8000/websocket");
+       ws.onopen = function (){alert("open")
+                ws.onmessage = function (msg) {
+                    var message = JSON.parse(msg.data);
+                    $("p#log").html(message.output);
+                };
+            };
+
+            // Bind send button to websocket
+            $("button#send").live("click", function() {
+                ws.send(JSON.stringify({'output': 'Sent from my browser!'}));
+            });
+
+            // Cleanly close websocket when unload window
+            window.onbeforeunload = function() {
+                ws.onclose = function () {}; // disable onclose handler first
+                ws.close()
+            };
+        });
+</script>
+{% endblock script %}
