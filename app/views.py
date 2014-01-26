@@ -25,10 +25,13 @@ def sensor(id):
                            data=Data.query.filter(Data.sensor_id == id))
 
 
-
-
-
-
-
-
-
+@sockets.route('/websocket')
+def echo_socket(ws):
+    while True:
+        message = ws.receive()
+        if Sensor.query.filter_by(id=int(message)).count():
+            queryr = Data.query.filter_by(sensor_id=int(message)).order_by(desc(Data.time)).limit(100).all()
+            ws.send(dumps(map(dict,queryr)))
+        else:
+            message = "cannot find your thing"
+            ws.send(message)

@@ -5,6 +5,30 @@ from datetime import datetime
 from app.database import Base
 
 
+def todict(self):
+    def convert_datetime(value):
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+
+    for c in self.__table__.columns:
+        if isinstance(c.type, DateTime):
+            value = convert_datetime(getattr(self, c.name))
+        else:
+            value = getattr(self, c.name)
+
+        yield(c.name, value)
+
+
+def iterfunc(self):
+    """Returns an iterable that supports .next()
+        so we can do dict(sa_instance)
+
+    """
+    return self.todict()
+
+Base.todict = todict
+Base.__iter__ = iterfunc
+
+
 class Sensor(Base):
     __tablename__ = 'sensors'
     id = Column(Integer, primary_key=True)
