@@ -16,26 +16,28 @@
 
 {% block script %}
   <script>
+ var data;
  $(document).ready(function(){
-     if ("WebSocket" in window) {
-       ws = new WebSocket("ws://" + document.domain +":8000/websocket");
-       ws.onopen = function (){alert("open")
-                ws.onmessage = function (msg) {
-                    var message = JSON.parse(msg.data);
-                    $("p#log").html(message.output);
-                };
-            };
+     
+     ws = new WebSocket("ws://" + document.domain +":8000/websocket");
+     ws.onopen = function (){alert("open")}
+     ws.onmessage = function (msg) {
+       var message = msg.data;
+       console.log(msg.data);
+       $("p#log").html(msg.data);
+      data = msg.data 
+     };
 
-            // Bind send button to websocket
-            $("button#send").live("click", function() {
-                ws.send(JSON.stringify({'output': 'Sent from my browser!'}));
-            });
+     // Bind send button to websocket
+     $("button#send").on("click", function() {
+       ws.send("1");
+     });
 
             // Cleanly close websocket when unload window
-            window.onbeforeunload = function() {
-                ws.onclose = function () {}; // disable onclose handler first
-                ws.close()
-            };
+     window.onbeforeunload = function() {
+       ws.onclose = function () {}; // disable onclose handler first
+       ws.close()
+     };
         });
 </script>
 {% endblock script %}
