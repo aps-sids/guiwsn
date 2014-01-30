@@ -5,6 +5,7 @@ from app import app
 from flask_sockets import Sockets
 from sqlalchemy import desc
 from json import dumps
+from time import sleep
 
 sockets = Sockets(app)
 
@@ -32,11 +33,12 @@ def sensor(id):
 
 @sockets.route('/websocket')
 def echo_socket(ws):
+    message = ws.receive()
+    ws.send(message)
     while True:
-        message = ws.receive()
-        if Sensor.query.filter_by(id=int(message)).count():
-            queryr = Data.query.filter_by(sensor_id=int(message)).order_by(desc(Data.time)).limit(100).all()
-            ws.send(dumps(map(dict,queryr)))
-        else:
-            message = "cannot find your thing"
-            ws.send(message)
+        if message is not None:
+            if Sensor.query.filter_by(id=int(message)).count():
+                queryr = Data.query.filter_by(sensor_id=int(message)).order_by(desc(Data.time)).limit(100).all()
+                ws.send(dumps(map(dict, queryr)))
+                sleep(2)
+        
