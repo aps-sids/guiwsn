@@ -8,13 +8,23 @@
     <meta name="author" content="">
 
 
-    <title>Starter Template for Bootstrap</title>
+    <title>WSN Monitoring</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{url_for('static',filename='bower_components/bootstrap/dist/css/bootstrap.css')}}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
+
+    <script src="{{url_for('static',filename='bower_components/chartjs/Chart.js')}}"></script>
+    <meta name = "viewport" content = "initial-scale = 1, user-scalable = no">
+    <style>
+      canvas{
+      }
+      #selector{
+        float: right;
+      }
+    </style>
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
